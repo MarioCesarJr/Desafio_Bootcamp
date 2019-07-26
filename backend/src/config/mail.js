@@ -4,9 +4,9 @@ export default {
   secure: false,
   auth: {
     user: process.env.MAIL_USER,
-    pass: process.env.MAIL_PASS
-    },
-    default: {
-        from: 'Equipe Meetup <noreply@meetup.com>',
-    },
+    pass: process.env.MAIL_PASS,
+  },
+  default: {
+    from: 'Equipe Meetup <noreply@meetup.com>',
+  },
 };

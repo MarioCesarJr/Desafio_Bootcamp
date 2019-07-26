@@ -30,8 +30,7 @@ routes.get('/subscriptions', SubscriptionController.index);
 routes.post('/meetups/:meetupId/subscriptions', SubscriptionController.store);
 
 routes.get('/organizing', OrganizingController.index);
-
+routes.get('/organizing/:id', OrganizingController.show);
 routes.post('/files', upload.single('file'), FileController.store);
 
 export default routes;
-
