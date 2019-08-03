@@ -1,5 +1,6 @@
 import { Op } from 'sequelize';
 import User from '../models/User';
+import File from '../models/File';
 import Meetup from '../models/Meetup';
 import Subscription from '../models/Subscription';
 import Mail from '../../lib/Mail';
@@ -13,6 +14,13 @@ class SubscriptionController {
       include: [
         {
           model: Meetup,
+          include: [
+            {
+              model: File,
+              attributes: ['path', 'url'],
+            },
+            { model: User, attributes: ['name'] },
+          ],
           where: {
             date: {
               [Op.gt]: new Date(),
@@ -21,6 +29,7 @@ class SubscriptionController {
           required: true,
         },
       ],
+
       order: [[Meetup, 'date']],
     });
 
@@ -82,6 +91,20 @@ class SubscriptionController {
     });
 
     return res.json(subscription);
+  }
+
+  async delete(req, res) {
+    const user_id = req.userId;
+
+    const subscription = await Subscription.findByPk(req.params.id);
+
+    if (subscription.user_id !== user_id) {
+      return res.status(401).json({ error: 'Not authorized.' });
+    }
+
+    await subscription.destroy();
+
+    return res.send();
   }
 }
 

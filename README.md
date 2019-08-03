@@ -16,7 +16,7 @@ App agregador de eventos para desenvolvedores chamado Meetapp (um acrônimo à M
 - Permite que novos usuários se cadastrem com nome, e-mail e senha
 - Criptografia de senha do usuário para segurança.
 - Atualização de senha com confirmação de campo com a mesma.
-- Validação dos dados de entrada;
+- Validação dos dados de entrada.
 
 ### Gerenciamento de meetups
 
