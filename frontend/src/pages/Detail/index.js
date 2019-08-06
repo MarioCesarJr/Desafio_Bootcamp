@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { format } from 'date-fns';
+import { format, isBefore, parse } from 'date-fns';
 import { Link } from 'react-router-dom';
 import pt from 'date-fns/locale/pt';
 import {
@@ -30,6 +30,7 @@ export default function Detail({ match }) {
                     ...response.data.meetup,
                     subscriptions: response.data.subscriptions,
                     file: response.data.meetup.File.url,
+                    past: isBefore(parse(meetup.date), new Date()),
                     formattedDate: format(
                         meetup.date,
                         'DD [de] MMMM, [às] HH:mm[h]',
@@ -74,14 +75,18 @@ export default function Detail({ match }) {
                 <>
                     <header>
                         <h1>{meetup.title}</h1>
+
                         <div className="button_container">
-                            <Link to={`/edit/${meetup.id}`}>
-                                <button type="button" className="edit">
-                                    <MdModeEdit size={17} />
-                                    <div className="space" />
-                                    Editar
-                                </button>
-                            </Link>
+                            {!meetup.past && (
+                                <Link to={`/edit/${meetup.id}`}>
+                                    <button type="button" className="edit">
+                                        <MdModeEdit size={17} />
+                                        <div className="space" />
+                                        Editar
+                                    </button>
+                                </Link>
+                            )}
+
                             <div className="space" />
                             <button
                                 type="button"
