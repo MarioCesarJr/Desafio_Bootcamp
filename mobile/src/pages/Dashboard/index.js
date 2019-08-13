@@ -19,6 +19,8 @@ import {
 export default function Dashboard() {
     const [meetups, setMeetups] = useState([]);
     const [date, setDate] = useState(new Date());
+    const [page, setPage] = useState(1);
+    const [refresh, setRefresh] = useState(false);
     const [loading, setLoading] = useState(false);
 
     const dateFormatted = useMemo(
@@ -28,29 +30,45 @@ export default function Dashboard() {
 
     function handlePrevDay() {
         setDate(subDays(date, 1));
+        setPage(1);
     }
 
     function handleNextDay() {
         setDate(addDays(date, 1));
+        setPage(1);
     }
 
     useEffect(() => {
         async function loadMeetups() {
             try {
-                setLoading(true);
                 const response = await api.get('meetups', {
-                    params: { date },
+                    params: { date, page },
                 });
 
                 setMeetups(response.data);
             } catch (err) {
                 console.tron.log(err);
+                Alert.alert('Erro', 'Por favor, tente mais tarde.');
             } finally {
+                setRefresh(false);
                 setLoading(false);
             }
         }
+
         loadMeetups();
-    }, [date]);
+    }, [date, page]);
+
+    function loadMore() {
+        if (meetups.length > 10) {
+            setPage(page + 1);
+            setLoading(true);
+        }
+    }
+
+    function handleRefresh() {
+        setPage(page - 1);
+        setRefresh(true);
+    }
 
     async function handleSubscription(id) {
         try {
@@ -93,11 +111,17 @@ export default function Dashboard() {
                         </Header>
 
                         {!loading && !meetups.length && (
-                            <Info>Não existe nenhum meetup nesta data.</Info>
+                            <Info>
+                                Não existe nenhum meetup nesta data ou horário.
+                            </Info>
                         )}
                         <List
                             data={meetups}
                             keyExtractor={item => String(item.id)}
+                            onEndReached={loadMore}
+                            onEndReachedThreshold={0.01}
+                            onRefresh={handleRefresh}
+                            refreshing={refresh}
                             renderItem={({ item }) => (
                                 <Meetups
                                     data={item}
