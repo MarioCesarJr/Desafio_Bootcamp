@@ -11,8 +11,11 @@ import {
 } from 'react-icons/md';
 import { toast } from 'react-toastify';
 import Loader from 'react-loader-spinner';
+import { confirmAlert } from 'react-confirm-alert';
 import history from '~/services/history';
 import api from '~/services/api';
+
+import './react-confirm-alert.css';
 
 import { Container } from './styles';
 
@@ -60,6 +63,25 @@ export default function Detail({ match }) {
         }
     }
 
+    function confirmDialog() {
+        confirmAlert({
+            title: 'Confirmação',
+            message: meetup.past
+                ? 'Você realmente deseja exluir o Meetup ?'
+                : 'Você realmente deseja cancelar o Meetup ?',
+            buttons: [
+                {
+                    label: 'Sim',
+                    onClick: () => handleCancel(meetup.id),
+                },
+                {
+                    label: 'Não',
+                    onClick: () => '',
+                },
+            ],
+        });
+    }
+
     return (
         <Container>
             {loading ? (
@@ -90,7 +112,7 @@ export default function Detail({ match }) {
                             <div className="space" />
                             <button
                                 type="button"
-                                onClick={() => handleCancel(meetup.id)}
+                                onClick={() => confirmDialog()}
                             >
                                 <MdDeleteForever size={17} />
                                 <div className="space" />

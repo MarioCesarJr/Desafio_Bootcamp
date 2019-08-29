@@ -17,7 +17,7 @@ export default function Routes() {
             <Route path="/" exact component={SignIn} />
             <Route path="/register" component={SignUp} />
 
-            <Route path="/dashboard" component={Dashboard} isPrivate />
+            <Route path="/dashboard/:page?" component={Dashboard} isPrivate />
             <Route path="/profile" component={Profile} isPrivate />
             <Route path="/detail/:id" component={Detail} isPrivate />
             <Route path="/new" component={New} isPrivate />

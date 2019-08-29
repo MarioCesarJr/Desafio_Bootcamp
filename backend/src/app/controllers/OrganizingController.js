@@ -5,7 +5,13 @@ import Subscription from '../models/Subscription';
 
 class OrganizingController {
   async index(req, res) {
-    const meetups = await Meetup.findAll({ where: { user_id: req.userId } });
+    const page = req.query.page || 1;
+
+    const meetups = await Meetup.findAll({
+      where: { user_id: req.userId },
+      limit: 5,
+      offset: 5 * page - 5,
+    });
 
     return res.json(meetups);
   }

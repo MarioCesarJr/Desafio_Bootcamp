@@ -2,7 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { format, isBefore, parse } from 'date-fns';
 import pt from 'date-fns/locale/pt';
-import { MdAddCircleOutline, MdChevronRight } from 'react-icons/md';
+import {
+    MdAddCircleOutline,
+    MdChevronRight,
+    MdSkipPrevious,
+    MdSkipNext,
+} from 'react-icons/md';
 import Loader from 'react-loader-spinner';
 import { toast } from 'react-toastify';
 import api from '~/services/api';
@@ -12,11 +17,26 @@ import { Container, List } from './styles';
 export default function Dashboard() {
     const [meetups, setMeetups] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [page, setPage] = useState(1);
+
+    function handlePrevPage() {
+        if (page > 1) {
+            setPage(page - 1);
+        }
+    }
+
+    function handleNextPage() {
+        if (page < meetups.length) {
+            setPage(page + 1);
+        }
+    }
 
     useEffect(() => {
         async function loadMeetups() {
             try {
-                const response = await api.get('organizing');
+                const response = await api.get('organizing', {
+                    params: { page },
+                });
 
                 const data = response.data.map(meetup => {
                     return {
@@ -40,8 +60,8 @@ export default function Dashboard() {
         }
 
         loadMeetups();
-    }, []);
-
+    }, [page]);
+    console.tron.log(page);
     return (
         <Container>
             {loading ? (
@@ -65,7 +85,7 @@ export default function Dashboard() {
                         </Link>
                     </header>
 
-                    {!loading && !meetups.length && (
+                    {!loading && !meetups.length && page === 1 && (
                         <div className="empty">
                             Você não tem nenhum meetup cadastrado.
                         </div>
@@ -90,9 +110,28 @@ export default function Dashboard() {
                             </Link>
                         ))}
                     </ul>
+
+                    <div className="pagination">
+                        {page > 1 && (
+                            <MdSkipPrevious
+                                size={25}
+                                color="#FFF"
+                                onClick={handlePrevPage}
+                                cursor="pointer"
+                            />
+                        )}
+
+                        {meetups.length === 5 && (
+                            <MdSkipNext
+                                size={25}
+                                color="#FFF"
+                                onClick={handleNextPage}
+                                cursor="pointer"
+                            />
+                        )}
+                    </div>
                 </>
             )}
-            ;
         </Container>
     );
 }

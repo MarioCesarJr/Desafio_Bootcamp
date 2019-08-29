@@ -85,4 +85,9 @@ export const List = styled.li`
         margin-top: 3px;
         color: #666;
     }
+
+    .pagination {
+        display: flex;
+        align-content: space-between;
+    }
 `;
