@@ -52,13 +52,4 @@ App agregador de eventos para desenvolvedores chamado Meetapp (um acrônimo à M
 
 ## Mobile
 
-![mobile-screenshot01](screenshots/mobile-screenshot01.png)
-
-![mobile-screenshot02](screenshots/mobile-screenshot02.png)
-
-![mobile-screenshot03](screenshots/mobile-screenshot03.png)
-
-![mobile-screenshot04](screenshots/mobile-screenshot04.png)
-
-![mobile-screenshot05](screenshots/mobile-screenshot05.png)
-
+![mobile](screenshots/mobile.png)
